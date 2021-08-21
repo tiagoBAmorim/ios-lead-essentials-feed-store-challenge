@@ -31,9 +31,7 @@ public final class CoreDataFeedStore: FeedStore {
 	public func retrieve(completion: @escaping RetrievalCompletion) {
 		perform { context in
 			do {
-				let request = NSFetchRequest<ManagedCache>(entityName: String(describing: ManagedCache.self))
-				request.returnsObjectsAsFaults = false
-				if let cache = try context.fetch(request).first {
+				if let cache = try ManagedCache.find(in: context) {
 					let feed = cache.feed.compactMap { ($0 as? ManagedFeedImage) }.map {
 						LocalFeedImage(id: $0.id, description: $0.imageDescription, location: $0.location, url: $0.url)
 					}
